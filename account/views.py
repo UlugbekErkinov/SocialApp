@@ -1,13 +1,10 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
-from .models import Profile
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
-# Create your views here.
+from .models import Profile
+from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
 
 
 def user_login(request):
@@ -48,13 +45,9 @@ def register(request):
                 user_form.cleaned_data['password'])
             # Save the User object
             new_user.save()
-
             # Create the user profile
             Profile.objects.create(user=new_user)
-            # Create the user profile
-            return render(request,
-                          'account/register_done.html',
-                          {'new_user': new_user})
+            return render(request, 'account/register_done.html', {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
     return render(request,
